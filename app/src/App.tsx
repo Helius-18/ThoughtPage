@@ -12,7 +12,6 @@ import {
   Firestore,
 } from "firebase/firestore";
 import ToastComponent from "./Components/ToastComponent";
-import HelperComponent from "./Components/HelperComponent";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBOujekLpfHDpobk0aIlpgp_Zhup-HNNps",
@@ -42,20 +41,20 @@ function App() {
   };
 
   const saveData = async () => {
-    let docRef = null;
+    // let docRef = null;
     if (db == null) {
       const app = initializeApp(firebaseConfig);
       const initialDb = getFirestore(app);
       setDb(initialDb);
     }
-    if (id == "") {
+    if (id === "") {
       try {
         axios
           .get("https://api.ipify.org?format=json")
           .then(async (response) => {
             const { ip } = response.data;
             try {
-              docRef = await setDoc(doc(collection(db, "notes"), ip), {
+              await setDoc(doc(collection(db, "notes"), ip), {
                 data: data,
               });
               // console.log("Document written with ID: ", docRef);
@@ -74,7 +73,7 @@ function App() {
       }
     } else {
       try {
-        docRef = await setDoc(doc(collection(db, "notes"), id), { data: data });
+        await setDoc(doc(collection(db, "notes"), id), { data: data });
         // console.log("Document written with ID: ", docRef);
       } catch (e) {
         console.error("Error adding document: ", e);
@@ -86,7 +85,7 @@ function App() {
 
   const getData = async (initialDb: Firestore, id: string) => {
     let docSnap = null as any;
-    if (id == "") {
+    if (id === "") {
       try {
         axios
           .get("https://api.ipify.org?format=json")
@@ -134,7 +133,7 @@ function App() {
     const initialDb = getFirestore(app);
     setDb(initialDb);
     getData(initialDb, "");
-  }, []);
+  }, [db]);
 
   useEffect(() => {
     if (defined) {
@@ -142,7 +141,7 @@ function App() {
     } else {
       setId("");
     }
-  }, [defined]);
+  },[]);
   return (
     <div className="App d-flex">
       {help ? (

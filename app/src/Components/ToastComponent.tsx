@@ -5,7 +5,7 @@ const ToastComponent: React.FC<{message: string, setToast: React.Dispatch<React.
         setTimeout(()=>{
             setToast(false);
         },5000)
-    },[])
+    })
   return (
     <div className="toast-container position-fixed bottom-0 end-0 p-3 text-light">
       <div
