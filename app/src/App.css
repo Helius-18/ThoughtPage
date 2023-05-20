@@ -48,3 +48,7 @@ input:focus
 input[type=checkbox]{
   background-color: rgb(211, 211, 211);
 }
+
+.help{
+  z-index: 10;
+}
