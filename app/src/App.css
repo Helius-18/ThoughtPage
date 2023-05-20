@@ -44,3 +44,7 @@ input:focus
 {
   outline: none;
 }
+
+input[type=checkbox]{
+  background-color: rgb(211, 211, 211);
+}

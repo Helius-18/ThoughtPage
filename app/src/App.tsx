@@ -8,9 +8,6 @@ import {
   collection,
   doc,
   setDoc,
-  addDoc,
-  DocumentData,
-  DocumentReference,
   getDoc,
   Firestore,
 } from "firebase/firestore";
@@ -29,6 +26,30 @@ function App() {
   const [data, setData] = useState("");
   const [db, setDb] = useState(null as any);
   const [id, setId] = useState("" as any);
+  let timeoutId: NodeJS.Timeout | null = null;
+
+  // saving after delay
+  const handleTextareaChange = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Delay in milliseconds
+    const delay = 3000; // Adjust the delay as needed
+
+    timeoutId = setTimeout(() => {
+      saveData();
+    }, delay);
+  };
+
+  // saving using keys
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.ctrlKey && event.key === 'k') {
+      event.preventDefault();
+      // Call your function here
+      saveData();
+    }
+  };
 
   const saveData = async () => {
     let docRef = null;
@@ -98,11 +119,10 @@ function App() {
     const initialDb = getFirestore(app);
     setDb(initialDb);
     getData(initialDb, '');
-    window.addEventListener("beforeunload", saveData);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      // Clean up the event listener when the component is unmounted
-      window.removeEventListener("beforeunload", saveData);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -139,7 +159,7 @@ function App() {
         className="text-area position-absolute top-0 start-0 w-100 h-100 border border-0 pt-5"
         autoFocus={true}
         value={data}
-        onChange={(e) => setData(e.target.value)}
+        onChange={(e) => {setData(e.target.value)}}
         placeholder="Type here ..."
       ></textarea>
     </div>
